@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rudra - Test Project
 
-## Getting Started
+A Next.js application with Material-UI components and Hasura GraphQL backend.
 
-First, run the development server:
+## Features
 
+- User authentication (Login, Signup, Forgot Password)
+- Protected routes
+- User management
+- Modern UI with Material-UI components
+- GraphQL API with Hasura
+- PostgreSQL database
+
+## Prerequisites
+
+- Node.js 18 or later
+- Docker and Docker Compose
+- npm or yarn
+
+## Setup
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd rudra
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create a `.env` file in the root directory with the following content:
+```env
+NEXT_PUBLIC_HASURA_ENDPOINT=http://localhost:8080/v1/graphql
+NEXT_PUBLIC_HASURA_ADMIN_SECRET=myadminsecretkey
+JWT_SECRET=your-jwt-secret-key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Start the Hasura and PostgreSQL containers:
+```bash
+docker-compose up -d
+```
 
-## Learn More
+5. Access the Hasura Console at http://localhost:8080/console and apply the following SQL:
+```sql
+-- Create users table
+CREATE TABLE users (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
-To learn more about Next.js, take a look at the following resources:
+-- Create necessary permissions
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+6. Run the development server:
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+7. Open http://localhost:3000 in your browser.
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+rudra/
+├── src/
+│   ├── app/              # Next.js pages
+│   ├── components/       # React components
+│   ├── graphql/         # GraphQL queries and mutations
+│   ├── hooks/           # Custom React hooks
+│   └── lib/             # Utility functions and configurations
+├── public/              # Static files
+└── docker-compose.yml   # Docker configuration
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technologies Used
+
+- Next.js 14
+- Material-UI
+- Apollo Client
+- Hasura GraphQL
+- PostgreSQL
+- Docker
+
+## Development
+
+- The application uses Next.js App Router
+- Material-UI for the component library
+- Apollo Client for GraphQL operations
+- Hasura for the GraphQL API
+- PostgreSQL for the database
+
+## Production Deployment
+
+1. Build the application:
+```bash
+npm run build
+```
+
+2. For the backend, you can use:
+- Hasura Cloud
+- Self-hosted Hasura instance
+- Any PostgreSQL database
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
